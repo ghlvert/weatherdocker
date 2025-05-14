@@ -1,11 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 import requests
-
+import os 
 
 from weatherapp.forms import WeatherForm
 
-API_KEY = '051ba3e645ee1f9ce4e930072ce9af1b'
+API_KEY = os.environ.get('API_KEY')
 
 # Create your views here.
 def index(request):
