@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}main page{% endblock title %}
+{% block content %}
+{% load my_tags %}
+
+ <div class="weather-container">
+    {% if error %}
+        <h3>{{error}}</h3>
+{% endif %}
+        <form method="get" action="." class="search-form">
+            <input type="text" name="city" class="search-input" placeholder="Search for a city..." value="{{ request.GET.city }}">
+            <button type="submit" class="search-button">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </button>
+        </form>
+
+
+ {% if weather_data %}
+
+        <div class="weather-header">
+            <h1>Weather in {{ weather_data.name }}, {{ weather_data.sys.country }} </h1>
+            <div>{% now "j F Y H:i" %}</div>
+        </div>
+
+        <div class="weather-main">
+            <div class="weather-icon">
+                <img src="http://openweathermap.org/img/wn/{{ weather_data.weather.0.icon }}@2x.png" alt="{{ weather_data.weather.0.description }}">
+            </div>
+            <div>
+                <div class="weather-temp">{% get_scale weather_data.main.temp %} </div>
+                <div>{{ weather_data.weather.0.main }} ({{ weather_data.weather.0.description }})</div>
+                <div>Feels like: {% get_scale weather_data.main.feels_like %}</div>
+            </div>
+        </div>
+
+        <div class="weather-details">
+            <div class="detail-item">
+                <div class="detail-label">Min Temperature</div>
+                <div class="detail-value">{% get_scale weather_data.main.temp_min %}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Max Temperature</div>
+                <div class="detail-value">{% get_scale weather_data.main.temp_max %}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Humidity</div>
+                <div class="detail-value">{{ weather_data.main.humidity }}%</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Pressure</div>
+                <div class="detail-value">{{ weather_data.main.pressure }} hPa</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Wind Speed</div>
+                <div class="detail-value">{{ weather_data.wind.speed }} m/s ({{ weather_data.wind.deg }}°)</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Visibility</div>
+                <div class="detail-value">{{ weather_data.visibility|floatformat:0 }} meters</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock content %}
